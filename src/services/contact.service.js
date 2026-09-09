@@ -1,6 +1,6 @@
 const transporter = require('../config/mailer');
 
-const sendContactEmail = async ({ name, email, message }) => {
+const sendContactEmail = async ({ name, email, phone, serviceType, message }) => {
   // Configuración del contenido del correo
   const mailOptions = {
     from: `"${name}" <${process.env.EMAIL_USER}>`, // Remitente
@@ -11,6 +11,9 @@ const sendContactEmail = async ({ name, email, message }) => {
       <h2>Nuevo mensaje desde el formulario web</h2>
       <p><strong>Nombre:</strong> ${name}</p>
       <p><strong>Correo del cliente:</strong> ${email}</p>
+      <p><strong>Teléfono:</strong> ${phone}</p>
+      <p><strong>Tipo de Servicio Solicitado:</strong> ${serviceType}</p>
+      <hr />
       <p><strong>Mensaje:</strong></p>
       <p>${message}</p>
     `,
