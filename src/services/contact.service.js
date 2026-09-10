@@ -1,6 +1,22 @@
 const transporter = require('../config/mailer');
 
-const sendContactEmail = async ({ name, email, phone, serviceType, message }) => {
+const sendContactEmail = async ({ name, email, phone, serviceType, device, brand, quantity, year, message }) => {
+  // Evaluamos si el servicio es Soporte Técnico (independiente de mayúsculas/tildes)
+  const isTechSupport = serviceType && serviceType.toLowerCase().includes('soporte');
+
+  // Construir bloque de detalles técnicos si aplica
+  let techDetails = '';
+  if (serviceType === 'Soporte Técnico') {
+    techDetails = `
+      <h3>Detalles del Equipo</h3>
+      <p><strong>Dispositivo:</strong> ${device}</p>
+      <p><strong>Marca:</strong> ${brand}</p>
+      <p><strong>Cantidad:</strong> ${quantity || 'No especificada'}</p>
+      <p><strong>Año:</strong> ${year || 'No especificado'}</p>
+      <hr />
+    `;
+  }
+
   // Configuración del contenido del correo
   const mailOptions = {
     from: `"${name}" <${process.env.EMAIL_USER}>`, // Remitente
@@ -14,6 +30,7 @@ const sendContactEmail = async ({ name, email, phone, serviceType, message }) =>
       <p><strong>Teléfono:</strong> ${phone}</p>
       <p><strong>Tipo de Servicio Solicitado:</strong> ${serviceType}</p>
       <hr />
+      ${techDetails}
       <p><strong>Mensaje:</strong></p>
       <p>${message}</p>
     `,
